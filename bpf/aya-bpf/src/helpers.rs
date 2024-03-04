@@ -599,6 +599,20 @@ pub unsafe fn bpf_probe_write_user<T>(dst: *mut T, src: *const T) -> Result<(), 
     }
 }
 
+#[inline]
+pub unsafe fn bpf_probe_write_user<T>(dst: *mut T, src: *const T,  len: u32) -> Result<(), c_long> {
+    let ret = gen::bpf_probe_write_user(
+        dst as *mut c_void,
+        src as *const c_void,
+        len
+    );
+    if ret == 0 {
+        Ok(())
+    } else {
+        Err(ret)
+    }
+}
+
 /// Read the `comm` field associated with the current task struct
 /// as a `[u8; 16]`.
 ///
